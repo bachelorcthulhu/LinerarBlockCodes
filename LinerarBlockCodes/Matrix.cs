@@ -33,16 +33,30 @@
 
     public class IdentityMatrix : Matrix
     {
+        public List<string> DualSyndromes { get; set; }
 
-        public IdentityMatrix(int _size) : base(_size)
+        public IdentityMatrix(int _size, bool _isDualSyndromesListNeeded) : base(_size)
         {
             Rows = _size;
             Columns = _size;
             Data = new GaloisField[Rows, Columns];
+            DualSyndromes = new List<string>();
 
             for (int i = 0; i < _size; i++)
             {
                 Data[i, i].Value = GF.ElementOne;
+            }
+
+            if (_isDualSyndromesListNeeded)
+            {
+                DualSyndromes.Add(SupportMethods.MakeStringFromVector(SupportMethods.GetColumn(Data, _size - 1)));
+                for (int i = _size - 2; i >= 0; i--)
+                {
+                    DualSyndromes.Insert(0,
+                        SupportMethods.MakeDualSyndrome(Data, i, i+1));
+                    DualSyndromes.Insert(0, 
+                        SupportMethods.MakeStringFromVector(SupportMethods.GetColumn(Data, i)));
+                }
             }
         }
     }

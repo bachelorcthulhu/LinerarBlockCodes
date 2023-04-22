@@ -23,7 +23,6 @@ namespace LinerarBlockCodes
             Value = _value;
         }
 
-
         public static GaloisField operator +(GaloisField _a, GaloisField _b)
         {
             return new GaloisField((byte)(_a.Value ^ _b.Value));
@@ -37,6 +36,11 @@ namespace LinerarBlockCodes
         public static GaloisField operator *(GaloisField _a, GaloisField _b)
         {
             return new GaloisField((byte)(_a.Value & _b.Value));
+        }
+
+        public string ToChar()
+        {
+            return Convert.ToString(Value);
         }
     }
 }
