@@ -90,7 +90,7 @@ namespace LinerarBlockCodes
             ParityPartLength = Columns - IdentityPartLength;
             AllSyndromes = new List<string>();
             MainSyndromes = new List<string>();
-            DualSyndromes= new List<string>();
+            DualSyndromes = new List<string>();
 
             int number = 0; // Стартовое число, с которого начинает заполняться матрица, т.к. 1 и 2 являются степенями двойки
             string binaryNumberSyndrom;           
@@ -108,7 +108,7 @@ namespace LinerarBlockCodes
                 List<string> SyndromesCandidates = new List<string>();
                 GaloisField[] tempVariable = new GaloisField[Rows];
 
-                for (int i = 0; i < ParityPartLength; i++)
+                for (int i = ParityPartLength - 1; i >= 0; i--)
                 {    
                     while (true)
                     {
@@ -184,12 +184,12 @@ namespace LinerarBlockCodes
 
             for (int i = 0; i < MainSyndromes.Count; i += 1)
             {
-                    Console.WriteLine("Синдром ошибки в {0} символе: {1}", i + 1, MainSyndromes[i]);               
+                    Console.WriteLine("Синдром указывает на ошибку в {0} символе: {1}", i + 1, MainSyndromes[i]);               
             }
 
             for (int i = 0; i < DualSyndromes.Count; i += 1)
             {
-                Console.WriteLine("Синдром ошибки в {0} и {1} символе: {2}", i + 1, i + 2, DualSyndromes[i]);
+                Console.WriteLine("Синдром на ошибку в {0} и {1} символе: {2}", i + 1, i + 2, DualSyndromes[i]);
             }
             Console.WriteLine();
         }

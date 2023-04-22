@@ -2,14 +2,18 @@
 using System.Numerics;
 
 int codewordLength = 32;
-int RedundantCheckingPart = 9;
-int messagePartLength = codewordLength - RedundantCheckingPart;
+int redundantCheckingPart = 9;
+int messagePartLength = codewordLength - redundantCheckingPart;
+string decodedSyndromString;
 
 string userInput;
 int inputNumber;
+int syndromeNumber;
+int[] dualSyndromesNumbers = new int[2];
 
 GaloisField[] codedWord = new GaloisField[codewordLength];
 GaloisField[] decodedSyndrom = new GaloisField[codewordLength];
+GaloisField[] userCodedWord = new GaloisField[codewordLength];
 
 ParityCheckMatrix parity32Matrix = new ParityCheckMatrix(9,32,true);
 parity32Matrix.PrintMatrix();
@@ -66,10 +70,39 @@ while (true)
         userInput = Console.ReadLine();
         try
         {
-            decodedSyndrom = SupportMethods.DecodeWord(
+            decodedSyndrom = SupportMethods.CheckSyndrome(
                     SupportMethods.MakeVectorFromString(userInput), parity32Matrix);
+            userCodedWord = SupportMethods.MakeVectorFromString(userInput);
+
             Console.Write("Декодированный синдром выглядит так: ");
             UserInteraction.PrintVector(decodedSyndrom);
+            decodedSyndromString = SupportMethods.MakeStringFromVector(decodedSyndrom);
+
+            syndromeNumber = SupportMethods.CheckOnSingleErrors(parity32Matrix.MainSyndromes,decodedSyndrom);
+            dualSyndromesNumbers = SupportMethods.CheckOnDualErrors(parity32Matrix.DualSyndromes, decodedSyndrom);
+
+            if (syndromeNumber != -1){
+                Console.WriteLine("Ошибка в {0} символе: {1}", syndromeNumber + 1, decodedSyndromString);
+                Console.WriteLine();
+
+                userCodedWord[syndromeNumber]++;
+            }
+            
+            if (SupportMethods.CheckOnDualErrors(parity32Matrix.DualSyndromes, decodedSyndrom) != null) 
+            {
+                Console.WriteLine("Ошибка в {0} и {1} символах.", dualSyndromesNumbers[0] + 1,
+                    dualSyndromesNumbers[1] + 1);
+                Console.WriteLine();
+
+                userCodedWord[dualSyndromesNumbers[0]]++;
+                userCodedWord[dualSyndromesNumbers[1]]++;
+
+            }
+
+            decodedSyndromString = SupportMethods.MakeStringFromVector(userCodedWord);
+            decodedSyndromString.Remove(0, decodedSyndromString.Length - redundantCheckingPart);
+            Console.WriteLine("Изначальное сообщение: {0}", decodedSyndromString);
+            
         }
         catch (FormatException)
         {

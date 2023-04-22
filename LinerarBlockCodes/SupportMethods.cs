@@ -95,7 +95,7 @@ namespace LinerarBlockCodes
             return codedVector;
         }
 
-        public static GaloisField[] DecodeWord(GaloisField[] _codedWord, ParityCheckMatrix _hMatrix)
+        public static GaloisField[] CheckSyndrome(GaloisField[] _codedWord, ParityCheckMatrix _hMatrix)
         {
             GaloisField[] decodedWord = new GaloisField[_hMatrix.IdentityPartLength];
 
@@ -108,6 +108,36 @@ namespace LinerarBlockCodes
             }
 
             return decodedWord;
+        }
+
+        public static int CheckOnSingleErrors(List<string> _mainSyndroms, GaloisField[] _syndrome)
+        {
+            string syndrome = MakeStringFromVector(_syndrome);
+
+            for (int i = 0; i < _mainSyndroms.Count; i++)
+            {
+                if (_mainSyndroms[i] == syndrome)
+                    return i;
+            }
+
+            return -1;
+        }
+
+        public static int[] CheckOnDualErrors(List<string> _dualSyndromes, GaloisField[] _syndrome)
+        {
+            string syndrome = MakeStringFromVector(_syndrome);
+            int[] numbers = new int[2]; 
+
+            for (int i = 0; i < _dualSyndromes.Count; i++)
+            {
+                if (_dualSyndromes[i] == syndrome)
+                {
+                    numbers[0] = i;
+                    numbers[1] = i + 1;
+                    return numbers;
+                }
+            }
+            return null;
         }
 
         public static string ConvertToBinary(int _number, int _numberLength)
