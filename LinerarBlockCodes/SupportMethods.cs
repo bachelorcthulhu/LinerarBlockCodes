@@ -80,6 +80,36 @@ namespace LinerarBlockCodes
             return MakeStringFromVector(dualSyndromGA);
         }
 
+        public static GaloisField[] MakeCodedWord(GaloisField[] _vector, GeneratorMatrix _gMatrix)
+        {
+            GaloisField[] codedVector = new GaloisField[_gMatrix.MessageLength];
+
+            for (int i = 0; i < _gMatrix.GetRows(); i++) 
+            {
+                for (int j = 0; j < _gMatrix.GetColumns(); j++)
+                {
+                    codedVector[j] = codedVector[j] + (_vector[i] * _gMatrix.Data[i, j]);
+                }
+            }
+
+            return codedVector;
+        }
+
+        public static GaloisField[] DecodeWord(GaloisField[] _codedWord, ParityCheckMatrix _hMatrix)
+        {
+            GaloisField[] decodedWord = new GaloisField[_hMatrix.IdentityPartLength];
+
+            for (int i = 0; i < _hMatrix.GetRows(); i++)
+            {
+                for (int j = 0; j < _hMatrix.GetColumns(); j++)
+                {
+                    decodedWord[i] = decodedWord[i] + (_codedWord[j] * _hMatrix.Data[i, j]);
+                }
+            }
+
+            return decodedWord;
+        }
+
         public static string ConvertToBinary(int _number, int _numberLength)
         {
             string binaryNumber = Convert.ToString(_number, 2);

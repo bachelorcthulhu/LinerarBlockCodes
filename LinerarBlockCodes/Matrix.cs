@@ -20,6 +20,16 @@ namespace LinerarBlockCodes
             Data = new GaloisField[Rows, Columns];
         }
 
+        public int GetRows()
+        {
+            return Rows;
+        }
+
+        public int GetColumns()
+        {
+            return Columns;
+        }
+
         public void PrintMatrix()
         {
             for (int i = 0; i < Rows; i++)
@@ -30,6 +40,7 @@ namespace LinerarBlockCodes
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine();
         }
     }
 
@@ -180,16 +191,43 @@ namespace LinerarBlockCodes
             {
                 Console.WriteLine("Синдром ошибки в {0} и {1} символе: {2}", i + 1, i + 2, DualSyndromes[i]);
             }
-            
+            Console.WriteLine();
         }
 
     }
 
     public class GeneratorMatrix : Matrix
     {
-        public GeneratorMatrix(int _rows, int _columns) : base(_rows, _columns) 
-        { 
+        public int IdentityPartLength { get; private set; }
+        public int ParityPartLength { get; private set; }
+        public int MessageLength { get; private set; }
 
+        public GeneratorMatrix(int _rows, int _columns) : base(_rows, _columns) 
+        {
+            IdentityPartLength = Rows;
+            MessageLength = Columns;
+            ParityPartLength = MessageLength - IdentityPartLength;
+        }
+
+        public void FillMatrix(Matrix _parityCheckMatrix)
+        {
+            int hMatrixRow = 0; // for count columns in parity check matrix
+
+            IdentityMatrix identityMatrix = new IdentityMatrix(Rows, true);
+
+            for (int i = 0; i < IdentityPartLength; i++)
+            {
+                Data[i, i].Value = identityMatrix.Data[i, i].Value;
+            }
+
+            for (int i = IdentityPartLength; i < Columns; i++)
+            {
+                for (int j = 0; j < Rows; j++)
+                {
+                    Data[j,i].Value = _parityCheckMatrix.Data[hMatrixRow, j].Value;
+                }
+                hMatrixRow++;
+            }
         }
     }
 }
