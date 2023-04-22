@@ -1,4 +1,5 @@
 ﻿global using GF = LinerarBlockCodes.GaloisFieldElements;
+using System;
 
 namespace LinerarBlockCodes
 {
@@ -19,7 +20,11 @@ namespace LinerarBlockCodes
 
         public GaloisField(byte _value)
         {
-            
+            if (_value > 1 ) {
+                throw new ArgumentException(String.Format("GF(2) принимает значения только 0 и 1. Вы ввели: " +
+                    "{0}", _value));
+            }
+
             Value = _value;
         }
 
@@ -37,6 +42,11 @@ namespace LinerarBlockCodes
         public static GaloisField operator *(GaloisField _a, GaloisField _b)
         {
             return new GaloisField((byte)(_a.Value & _b.Value));
+        }
+
+        public char ToChar()
+        {      
+            return (char)Value;
         }
     }
 }
