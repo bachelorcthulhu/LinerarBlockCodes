@@ -21,6 +21,21 @@ namespace LinerarBlockCodes
             return vectorAsString;
         }
 
+        public static GaloisField[] MakeVectorFromString(string _vector)
+        {
+            GaloisField[] vector = new GaloisField[_vector.Length];
+
+            for (int i = 0; i < _vector.Length; i++)
+            {
+                if (_vector[i] == '0')
+                    vector[i].Value = GF.ElementZero;
+                else
+                    vector[i].Value = GF.ElementOne;
+            }
+
+            return vector;
+        }
+
         public static GaloisField[] GetColumn<GaloisField>(this GaloisField[,] matrix, int _column)
         {
             var rowLength = matrix.GetLength(0);
@@ -63,6 +78,13 @@ namespace LinerarBlockCodes
             }
 
             return MakeStringFromVector(dualSyndromGA);
+        }
+
+        public static string ConvertToBinary(int _number, int _numberLength)
+        {
+            string binaryNumber = Convert.ToString(_number, 2);
+
+            return binaryNumber.PadLeft(_numberLength, '0');
         }
     }
 }

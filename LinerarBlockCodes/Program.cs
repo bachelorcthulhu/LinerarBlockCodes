@@ -4,7 +4,7 @@ IdentityMatrix testMatrix = new IdentityMatrix(5,true);
 
 testMatrix.PrintMatrix();
 
-foreach(var syndrom in testMatrix.DualSyndromes)
-{
-    Console.WriteLine(syndrom);
-}
+ParityCheckMatrix extraTestMatrix = new ParityCheckMatrix(9,32,true);
+extraTestMatrix.PrintMatrix();
+
+extraTestMatrix.PrintAllSyndromes();
