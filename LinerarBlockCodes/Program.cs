@@ -1,7 +1,7 @@
 ﻿using LinerarBlockCodes;
 using System.Numerics;
 
-int codewordLength = 32;
+int codewordLength = 41;
 int redundantCheckingPart = 9;
 int messagePartLength = codewordLength - redundantCheckingPart;
 string decodedSyndromString;
@@ -15,11 +15,11 @@ GaloisField[] codedWord = new GaloisField[codewordLength];
 GaloisField[] decodedSyndrom = new GaloisField[codewordLength];
 GaloisField[] userCodedWord = new GaloisField[codewordLength];
 
-ParityCheckMatrix parity32Matrix = new ParityCheckMatrix(9,32,true);
+ParityCheckMatrix parity32Matrix = new ParityCheckMatrix(redundantCheckingPart,codewordLength,true);
 parity32Matrix.PrintMatrix();
 parity32Matrix.PrintAllSyndromes();
 
-GeneratorMatrix generator32Matrix = new GeneratorMatrix(23, 32);
+GeneratorMatrix generator32Matrix = new GeneratorMatrix(messagePartLength, codewordLength);
 generator32Matrix.FillMatrix(parity32Matrix);
 generator32Matrix.PrintMatrix();
 
@@ -31,7 +31,7 @@ generator32Matrix.PrintMatrix();
 //GaloisField[] decodedWord = SupportMethods.DecodeWord(codedWord, parity32Matrix);
 //UserInteraction.PrintVector(decodedSyndrom);
 
-Console.WriteLine("Размеры матрицы - 9 на 32, вшиты в код, а именно programm.cs." +
+Console.WriteLine("Размеры матрицы - 9 на 41, вшиты в код, а именно programm.cs." +
         "Можно попробровать поменять их, но при этом стоит помнить о степенях двойки и общем принципа данного кодирования.");
 Console.WriteLine();
 Console.WriteLine("Введите 'convert', чтобы перевести число в двоичную систему исчисления с нужными разрядами");
@@ -46,7 +46,7 @@ while (true)
 
     if (userInput == "convert")
     {
-        UserInteraction.InputNumber(23);
+        UserInteraction.InputNumber(messagePartLength);
     }
     else if (userInput == "code")
     {
